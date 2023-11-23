@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  fluent-bit:
+    image: "cr.fluentbit.io/fluent/fluent-bit"
+    container_name: fluent-bit
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    volumes:
+      - type: bind
+        source: ./fluent.conf
+        target: /fluent-bit/etc/fluent-bit.conf
+      - type: bind
+        source: ./parsers.conf
+        target: /fluent-bit/etc/parsers.conf
+  ws-listen:
+    container_name: ws-listen
+    build: .
+    stdin_open: true
+    depends_on:
+      - fluent-bit
+    logging:
+      driver: fluentd
+  prometheus:
+    image: "prom/prometheus"
+    container_name: prom
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus:/etc/prometheus
+      - type: bind
+        source: ./prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+    restart: unless-stopped
+  grafana:
+    image: "grafana/grafana-enterprise"
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+      - type: bind
+        source: ./grafana/provisioning
+        target: /etc/grafana/provisioning
+    restart: unless-stopped
+    links:
+      - "prometheus"
+
+volumes:
+  grafana:
+  prometheus:
