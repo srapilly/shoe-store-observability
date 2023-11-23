@@ -1,0 +1,100 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: fast
+    folder: alerts
+    interval: 30s
+    rules:
+      - uid: b6b6f3bc-1b38-44db-b365-dd1ea69226dc
+        title: Less than 5 products in store
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 900
+              to: 0
+            datasourceUid: d7b3baf7-8a68-477c-abcb-2ede9e1a58c3
+            model:
+              datasource:
+                type: prometheus
+                uid: d7b3baf7-8a68-477c-abcb-2ede9e1a58c3
+              disableTextWrap: false
+              editorMode: builder
+              expr: sum by(model, store) (log_metric_gauge_product_quantity)
+              fullMetaSearch: false
+              includeNullMetadata: false
+              instant: false
+              interval: ""
+              intervalMs: 15000
+              key: Q-ba820da9-9688-447f-9319-2ab69089852d-0
+              legendFormat: __auto
+              maxDataPoints: 43200
+              range: true
+              refId: A
+              useBackend: false
+          - refId: B
+            relativeTimeRange:
+              from: 900
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params: []
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: reduce
+          - refId: C
+            relativeTimeRange:
+              from: 900
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 5
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - C
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: B
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        dashboardUid: ea04a9a0-e25f-4226-89a8-f906e4a2ff4b
+        panelId: 1
+        noDataState: NoData
+        execErrState: Error
+        for: 30s
+        annotations:
+          __dashboardUid__: ea04a9a0-e25f-4226-89a8-f906e4a2ff4b
+          __panelId__: "1"
+        labels: {}
+        isPaused: false
