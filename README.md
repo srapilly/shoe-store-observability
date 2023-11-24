@@ -5,7 +5,7 @@ Docker and Docker Compose are needed to launch the program.
 1. Run the [inventory](https://github.com/mathieugagne/shoe-store) events with `(bin/)websocketd --port=8080 ruby inventory.rb`
 2. Execute `docker-compose up`
 
-A Grafana instance will be accessible at the following address: http://localhost:3000. A dashboard and an alert will be automatically provisioned and visible in the interface.
+A Grafana instance will be accessible at the following address: http://localhost:3000 (default login and password: `admin`) A dashboard and an alert will be automatically provisioned and visible in the interface.
 
 ![Dashboard with 3 visualisations: A line chart with the quantity by model, a table with the quentity by model and store, and the alert visualizer](images/dashboard.png)
 
